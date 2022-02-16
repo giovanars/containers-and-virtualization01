@@ -1,14 +1,16 @@
 version: "3.5"
 services:
   api:
-    container_name: virtualization-and-container.api
-    image: virtualization-and-container.api
+    container_name: container-and-virtualization.api
+    image: container-and-virtualization.api
     build:
       context: .
     ports:
       - "8080:8080"
+    networks:
+      - container-and-virtualization-network
   mongo:
-    container_name: virtualization-and-container.mongo
+    container_name: container-and-virtualization.mongo
     image: mongo:latest
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -16,10 +18,19 @@ services:
       MONGO_INITDB_DATABASE: container-and-virtualization
     ports:
       - "27017:27017"
+    networks:
+      - container-and-virtualization-network
   web:
-    container_name: virtualization-and-container.nginx
+    container_name: container-and-virtualization.nginx
     image: nginx
     ports:
       - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - container-and-virtualization-network
+
+
+networks:
+  container-and-virtualization-network:
+    driver: bridge
